@@ -1,0 +1,12 @@
+{
+  "name": "practice-dealer-tommy",
+  "version": "0.1.0",
+  "description": "REST API de la Concesionaria Autos Tommy en Node JS.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node ./index.js"
+  },
+  "keywords": [],
+  "author": "@MoisesNevCistem",
+  "license": "ISC"
+}
