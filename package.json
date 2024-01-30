@@ -4,9 +4,15 @@
   "description": "REST API de la Concesionaria Autos Tommy en Node JS.",
   "main": "index.js",
   "scripts": {
-    "dev": "node ./index.js"
+    "dev": "nodemon --config ./nodemon.json ./index.js"
   },
   "keywords": [],
   "author": "@MoisesNevCistem",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "nodemon": "^3.0.3"
+  }
 }
