@@ -1,5 +1,29 @@
-
-//* Importaciones
+//* Configuración de variables de entorno
 require('dotenv').config();
 
-console.log("✨ Practice Dealer Tommy has been started...");
+//* Importación de dependencias
+
+
+//* Importación de runApp de la Aplicación
+const { runApp } = require('./src/run.app');
+
+//* Importación de enrutadores principales
+const { appRouter } = require('./src/app/main.routes');
+const { authRouter } = require('./src/auth/main.routes');
+
+//* Inicialización de servidores
+const AppServer = runApp(appRouter);
+const AuthServer = runApp(authRouter);
+
+//? Desestructuraión de variables de entorno
+const { NODE_ENV, APP_VERSION, APP_PORT, AUTH_PORT, HTTPS } = process.env;
+
+//? Ejecución de servidores
+if( NODE_ENV === 'production' && Boolean(HTTPS) ){
+    console.log("✅ Desplegando Servidor HTTPS");
+} else {
+    console.log("✅ Desplegando Servidor HTTP");
+}
+
+
+console.log(`✨ Dealer Tommy v${ APP_VERSION } has been started...`);

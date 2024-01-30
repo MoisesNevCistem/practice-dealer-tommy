@@ -1,6 +1,11 @@
 //* Importaciones
 const cors = require('cors');
 
+/**
+ * Habilita CORS para todos los origenes especificados.
+ * @name allowedOriginsCors
+ * @returns {Function} Configuraciones de Cors
+ */
 const allowedOriginsCors = () => {
 
     //? Desestructuracion de variables de entorno
