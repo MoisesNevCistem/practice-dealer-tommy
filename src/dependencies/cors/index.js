@@ -12,7 +12,7 @@ const allowedOriginsCors = () => {
     const { LIST_ORIGINS_CORS } = process.env;
 
     //?Evaluacion de origenes permitidos
-    if( LIST_ORIGINS_CORS === '' ) {
+    if( LIST_ORIGINS_CORS !== '' ) {
 
         /**
          * @type {string[]} Lista de origenes permitidos.

@@ -22,7 +22,7 @@ const runApp = ( router ) => {
     const app = express();
 
     //? Evaluación de dependencias en desarollo
-    if( NODE_ENV === 'develoment' ){
+    if( NODE_ENV === 'development' ){
         app.use( morgan('dev') );
         //NOTE: Aquí se puede configurar más middlewares 
     }
