@@ -1,6 +1,14 @@
 //* Importaciones
 const { Router } = require('express');
 
+const { welcomeController } = require('./controllers')
+
+/**
+ * Funcion de inyeccion de dependencias para controlador.
+ * 
+ * @param {object} dependencies - Lista de dependencias de la aplicacion.
+ * @returns {Funtion} welcomeRouter
+ */
 module.exports = ( dependencies ) => {
 
     /**
@@ -11,14 +19,7 @@ module.exports = ( dependencies ) => {
     //* ----> Definicion de Rutas
 
     //? Servicio para la conexion de prueba AUTH
-    welcomeRouter.get('/', ( req, res, next ) => {
-        res.status(200);
-        res.json({
-            message: 'Bienvenido a REST API Consecionaria Tommy!! :D',
-            server: 'auth'
-        });
-        res.end();
-    });
+    welcomeRouter.get('/', welcomeController(dependencies));
 
     return welcomeRouter;
 };
