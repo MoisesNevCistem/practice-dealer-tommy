@@ -2,6 +2,7 @@
 const { Router } = require('express');
 
 const { createUserController } = require('./controllers');
+const { createUserRule } = require('./rules');
 
 /**
  * Funcion de inyeccion de dependencias para controlador.
@@ -19,7 +20,10 @@ module.exports = ( dependencies ) => {
     //* ----> Definicion de Rutas
 
     //? Servicio para creación de usuarios
-    userRouter.post( '/create_user', createUserController(dependencies) );
+    userRouter.post( 
+        '/create_user',                       //* --> Ruta de servicio
+        createUserRule(dependencies),         //* --> Reglas
+        createUserController(dependencies) ); //* --> Controlador
 
     return userRouter;
 };

@@ -25,6 +25,16 @@ const repositoryErrors = {
                 message: `El servicio '${ url }' que intentaconsultar no esta disponible`,
             }
         }
+    },
+    VALIDATE_ERROR: ( error ) => {
+        return{ 
+            succes: false,
+            status_code: statusCode.BAD_REQUEST,
+            error:{
+                code: 'B03',
+                message: error,
+            }
+        }
     }
 }
 

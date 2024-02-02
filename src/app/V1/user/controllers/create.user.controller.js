@@ -10,8 +10,6 @@
  */
 module.exports = ( dependencies ) => {
 
-    console.log("dependencies:", dependencies);
-
     //? Desestructuracion de dependencias
     const { statusCode } = dependencies;
 
