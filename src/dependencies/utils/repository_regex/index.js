@@ -4,4 +4,4 @@ const repositoryRegex = {
     'REGEX_PASSWORD': /^(?=.*[a-z])(?=.*[A-Z])(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/
 }
 
-module.exports = { repositoryRegex }
+module.exports = { repositoryRegex };

@@ -1,11 +1,11 @@
 //* Importaciones
-const customRules = require('./custom_rules');
 const deploys = require('./deploys');
 const formatters = require('./formatters');
+const {repositoryRegex} = require('./repository_regex');
 
 
 module.exports = {
-    customRules,
     deploys,
-    formatters
+    formatters,
+    repositoryRegex,
 }
