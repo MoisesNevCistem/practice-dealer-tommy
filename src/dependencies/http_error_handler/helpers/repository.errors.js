@@ -35,6 +35,26 @@ const repositoryErrors = {
                 message: error,
             }
         }
+    },
+    EMAIL_EXIST: ( email ) => {
+        return{ 
+            succes: false,
+            status_code: statusCode.CONFLICT,
+            error:{
+                code: 'B04',
+                message: `El correo '${ email }' ya ha sido registrado`,
+            }
+        }
+    },
+    PHONE_NUMBER_EXIST: ( phoneNumber ) => {
+        return{ 
+            succes: false,
+            status_code: statusCode.CONFLICT,
+            error:{
+                code: 'B05',
+                message: `El número '${ phoneNumber }' ya ha sido registrado`,
+            }
+        }
     }
 }
 

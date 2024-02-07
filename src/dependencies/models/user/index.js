@@ -66,6 +66,3 @@ const User = sequelize.define('user', {
 User.belongsTo(statusUser, { foreignKey: 'id_status_user' }); //? 👈 Relación de Uno a Uno
 
 module.exports = { User };
-
-
-// TODO: Integración de relaciones
