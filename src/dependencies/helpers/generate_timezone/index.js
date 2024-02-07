@@ -1,23 +1,22 @@
 /**
  * Obtiene la zona horaria del sistema.
  * 
+ * @name generateTimezone
  * @returns {string} Uso Horario.
  */
 const generateTimezone = () => {
 
-    //? Obtener fecha y hora actual
-    const today = new Date();
+    //? Deducción de zona horaria
+    const now = new Date();
+    const timeZoneOffsetMinutes = now.getTimezoneOffset();
+    const timeZoneOffsetHours = timeZoneOffsetMinutes / 60;
 
-    //? Obtener la zona horaria del sistema
-    const getTimezone = today.getTimezoneOffset();
-
-    //? Convertir la diferencia de minutos a horas
-    const timeDifference = getTimezone / 60;
-
-    //? Generar la zona horaria del sistema
-    const timezone = `Etc/GMT${ timeDifference >= 0 ? '+' : '-'}${Math.abs( timeDifference )}`;
-
-    return timezone;
+    //? Formato para obtener la cadena de zona horaria en formato ±HH:mm
+    const timeZoneOffsetString = (timeZoneOffsetHours >= 0 ? '+' : '-') +
+        Math.abs(Math.floor(timeZoneOffsetHours)).toString().padStart(2, '0') + ':' +
+        (Math.abs(timeZoneOffsetMinutes) % 60).toString().padStart(2, '0');
+    
+    return timeZoneOffsetString;
 
 }
 

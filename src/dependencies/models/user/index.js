@@ -1,6 +1,7 @@
 //* Importaciones
 const { sequelize } = require('../db.connect');
 const { DataTypes } = require('sequelize');
+const { statusUser } = require('../status_user');
 
 //? Espeficaciones de la tabla
 const modelConfig = { 
@@ -16,7 +17,7 @@ const User = sequelize.define('user', {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: flase,
+        allowNull: false,
     },
     users_uuid: {
         type: DataTypes.STRING(255),
@@ -60,10 +61,11 @@ const User = sequelize.define('user', {
         allowNull: false
     },
 
-}, modelConfig); 
+}, modelConfig);
+
+User.belongsTo(statusUser, { foreignKey: 'id_status_user' }); //? 👈 Relación de Uno a Uno
+
+module.exports = { User };
+
 
 // TODO: Integración de relaciones
-// @see https://sequelize.org/docs/v6/core-concepts/assocs/
-
-//1- Investigar sobre las relaciones de Sequelize
-//2- Realizar el modelo de Status_Users

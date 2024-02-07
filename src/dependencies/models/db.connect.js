@@ -58,13 +58,30 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PWD, {
     },
     timezone: generateTimezone(),
     dialectOptions: {
-        //? Configura el tipo de tiempo a utilizar (UTC o Zona Horaria Local)
-        useUTC: false,
-        options: {
-            //? Configura el cifrado de la conexión
-            encrypt: Boolean( DB_ENCRYPT )
-        }
+        //* Forma en SQL server
+        // //? Configura el tipo de tiempo a utilizar (UTC o Zona Horaria Local)
+        // useUTC: false,
+        // options: {
+        //     //? Configura el cifrado de la conexión
+
+        // }
+        //? configura el cifrado de la conexión
+        ssl: Boolean( DB_ENCRYPT )
     }
 });
 
-module.exports = { sequelize };
+/**
+ * Verifica la conexión a base de datos.
+ * 
+ * @name checkConectionDB
+ */
+const checkConectionDB = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('🙌 Conexión a base de datos establecida con éxito');
+    } catch (ConnectionError) {
+        console.log('❌ La conexión a base de datos ha fallado: ', ConnectionError);
+    }
+};
+
+module.exports = { sequelize, checkConectionDB };

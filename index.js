@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 //* Importación de dependencias
-const { utils } = require('./src/dependencies');
+const { utils, models } = require('./src/dependencies');
 
 //* Importación de runApp de la Aplicación
 const { runApp } = require('./src/run.app');
@@ -51,3 +51,4 @@ if( NODE_ENV === 'production' && Boolean(HTTPS) ){
 
 
 console.log(`✨ Dealer Tommy v${ APP_VERSION } has been started...\n`);
+models.checkConectionDB();
