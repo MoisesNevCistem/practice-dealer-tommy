@@ -1,7 +1,7 @@
 //* Importaciones
 const { Router } = require('express');
 
-const { createUserController } = require('./controllers');
+const { createUserController, getUsersController } = require('./controllers');
 const { createUserRule } = require('./rules');
 
 /**
@@ -21,9 +21,15 @@ module.exports = ( dependencies ) => {
 
     //? Servicio para creación de usuarios
     userRouter.post( 
-        '/create_user',                       //* --> Ruta de servicio
-        createUserRule(dependencies),         //* --> Reglas
-        createUserController(dependencies) ); //* --> Controlador
+        '/create_user',                        //* --> Ruta de servicio
+        createUserRule(dependencies),          //* --> Reglas
+        createUserController(dependencies) );  //* --> Controlador
+    
+    //? Servicio para consultar todos los usuarios
+    userRouter.get( 
+        '/get_users',                          //* --> Ruta de servicio
+        getUsersController(dependencies) );    //* --> Controlador
+
 
     return userRouter;
 };

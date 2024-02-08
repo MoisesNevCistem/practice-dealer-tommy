@@ -80,6 +80,3 @@ module.exports = ( dependencies ) => {
     return createUserService;
 
 };
-
-//TODO: Endpoint para obtener todos los usuarios
-//TODO: Encripta la contraseña

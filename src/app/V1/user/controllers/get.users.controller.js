@@ -1,37 +1,33 @@
 //* Importaciones
-const { createUserService } = require('../services');
+const { getUsersService } = require('../services');
 
 /**
  * Funcion de inyeccion de dependencias para controlador.
  * 
  * @typedef {object} Helpers
  * @property {Function} generateUUID - Función que genera un código UUID.
- * @property {Function} encrypt - Función de encriptado
- * 
- * @typedef {object} HttpErrorHandler
- * @property {object} ExeptionError - Clase que estándariza los errores de la apolicación.
  * 
  * @typedef {object} HttpStatusCode
- * @property {string} CREATED - Código de respuesta HTTP.
+ * @property {string} OK - Codigo de respuesta HTTP.
  * 
  * @typedef {object} Models
- * @property {object} User - Modelo de la entidad Usuario.
+ * @property {string} User - Modelo de la entidad Usuario.
  * 
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
  * @param {Helpers} dependencies.helpers - Código de apoyo.
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {HttpStatusCode} dependencies.statusCode - Lista de códigos de respuesta HTTP.
  * @param {Models} dependencies.models - Modelos
- * @returns {Funtion} createUserController
+ * @returns {Funtion} getAllUsersController
  */
 module.exports = ( dependencies ) => {
 
     //? Desestructuracion de dependencias
-    const { helpers, httpErrorHandler, statusCode, models } = dependencies;
+    const { statusCode, models } = dependencies;
     
     //? Centralización de servicios
     const services = {
-        createUser: createUserService({ httpErrorHandler, models }),
+        getUsers: getUsersService({ models }),
     };
 
     /**
@@ -48,32 +44,19 @@ module.exports = ( dependencies ) => {
      * @param {*} res - Referencia para retornar una respuesta.
      * @param {*} next - Funcion que continua el flujo de la aplicacion.
      */
-    const createUserController = async ( req, res, next ) => {
+    const getUsersController = async ( req, res, next ) => {
         try {
 
-            //? Ayuda a encriptar contraseñas
-            const encryptedPassword = await helpers.encrypt(req.body.user_password);
-
-            //? Servicio de creación de usuario
-            const response = await services.createUser({
-                users_uuid: helpers.generateUUID(),
-                first_name: req.body.first_name,
-                middle_name: req.body.middle_name === undefined ? null : req.body.middle_name,
-                last_name: req.body.last_name,
-                surename: req.body.surename === undefined ? null : req.body.surename,
-                email: req.body.email,
-                user_password: encryptedPassword,
-                phone_number: req.body.phone_number,
-                user_address: req.body.user_address === undefined ? null : req.body.user_address,
-            });
+            //? Servicio de obtener todos de usuarios
+            const response = await services.getUsers();
 
             if ( response ){
-                res.status(statusCode.CREATED);
+                res.status(statusCode.OK);
                 res.json({
                     success: true,
-                    status_code: statusCode.CREATED,
+                    status_code: statusCode.OK,
                     response: {
-                        message: "Usuario ha sido creado éxitosamente"
+                        data: response,
                     }
                 });
                 res.end();
@@ -85,6 +68,6 @@ module.exports = ( dependencies ) => {
         }
     };
 
-    return createUserController;
+    return getUsersController;
 
-}
+};
