@@ -4,9 +4,12 @@ const { createUserService } = require('../services');
 /**
  * Funcion de inyeccion de dependencias para controlador.
  * 
+ * @typedef {object} SchemeEncryptHandler
+ * @property {Function} encrypt - Función para encriptar
+ * 
  * @typedef {object} Helpers
+ * @property {SchemeEncryptHandler} encryptHandler - Función de encriptación.
  * @property {Function} generateUUID - Función que genera un código UUID.
- * @property {Function} encrypt - Función de encriptado
  * 
  * @typedef {object} HttpErrorHandler
  * @property {object} ExeptionError - Clase que estándariza los errores de la apolicación.
@@ -51,8 +54,8 @@ module.exports = ( dependencies ) => {
     const createUserController = async ( req, res, next ) => {
         try {
 
-            //? Ayuda a encriptar contraseñas
-            const encryptedPassword = await helpers.encrypt(req.body.user_password);
+            //? Clave secreta para contraseñas
+            const { PWD_SECRET } = process.env;
 
             //? Servicio de creación de usuario
             const response = await services.createUser({
@@ -62,7 +65,7 @@ module.exports = ( dependencies ) => {
                 last_name: req.body.last_name,
                 surename: req.body.surename === undefined ? null : req.body.surename,
                 email: req.body.email,
-                user_password: encryptedPassword,
+                user_password: await helpers.encryptHandler.encrypt(req.body.user_password + PWD_SECRET),
                 phone_number: req.body.phone_number,
                 user_address: req.body.user_address === undefined ? null : req.body.user_address,
             });

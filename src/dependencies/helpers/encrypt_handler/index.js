@@ -1,9 +1,24 @@
 //* Importaciones
-const { hash } = require('bcryptjs');
+const { compare, hash } = require('bcryptjs');
 
-const encrypt = async ( value ) => {
-    const passwordHash = await hash( value, 8 );
-    return passwordHash;
-}; 
+/**
+ * Función para encriptar y codificar un valor.
+ * 
+ * @name encrypt
+ * @param {string} value - Valor a encriptar 
+ * @returns {string} Valor encriptado.
+ */
+const encrypt = async ( value ) => await hash( value, 8 );
 
-module.exports = { encrypt };
+/**
+ * Función para comparar un valor encrptado.
+ * 
+ * @name verifiedEncrypted
+ * @param {string} value - Valor a verificar.
+ * @param {string} encryptedValue - Valor encriptado a comprar.
+ * @returns {string} Valor encriptado.
+ */
+const verifiedEncrypted = async ( value, encryptedValue ) => await compare( value, encryptedValue );
+
+
+module.exports = { encrypt, verifiedEncrypted };

@@ -20,7 +20,6 @@ module.exports = ( models ) => {
      */
     const getUsersCase = async () => {
         return await User.findAll();
-        return true;
     };
     
     return getUsersCase;

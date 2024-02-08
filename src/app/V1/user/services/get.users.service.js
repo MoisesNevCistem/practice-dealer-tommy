@@ -22,7 +22,7 @@ module.exports = ( dependencies ) => {
 
     //? Centralización de casos de uso
     const useCases = {
-        getAllUser: getUsersCase( models )
+        getAllUsers: getUsersCase( models )
     };
 
     /**
@@ -39,7 +39,7 @@ module.exports = ( dependencies ) => {
     const getUsersService = async ( body ) => {
 
         //* Obtener todos los usuarios
-        return await useCases.getAllUser();
+        return await useCases.getAllUsers();
     };
 
     return getUsersService;

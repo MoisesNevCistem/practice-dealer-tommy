@@ -1,5 +1,5 @@
 //* Importaciones
-const { getUsersService } = require('../services');
+const { getUserService } = require('../services');
 
 /**
  * Funcion de inyeccion de dependencias para controlador.
@@ -27,11 +27,13 @@ module.exports = ( dependencies ) => {
     
     //? Centralización de servicios
     const services = {
-        getUsers: getUsersService({ models }),
+        getUser: getUserService({ models }),
     };
+    
+    console.log("services: ", services.getUser );
 
     /**
-     * Controlador que coordiba el proceso para crear un usuario.
+     * Controlador que coordina la busqueda de un usuario.
      * 
      * Un controlador se encarga de realizar 4 ***responsabilidades***:
      * 1. Recibe la peticion entrante del cliente.
@@ -44,11 +46,11 @@ module.exports = ( dependencies ) => {
      * @param {*} res - Referencia para retornar una respuesta.
      * @param {*} next - Funcion que continua el flujo de la aplicacion.
      */
-    const getUsersController = async ( req, res, next ) => {
+    const getUserController = async ( req, res, next ) => {
         try {
-
+            
             //? Servicio de obtener todos de usuarios
-            const response = await services.getUsers();
+            const response = await services.getUser(req.body);
 
             if ( response ){
                 res.status(statusCode.OK);
@@ -63,11 +65,11 @@ module.exports = ( dependencies ) => {
             }
             
         } catch (errorController) {
-            console.log('❌ GET_USERS_CONTROLLER_ERROR: ', errorController);
+            console.log('❌ CREATE_USER_CONTROLLER_ERROR: ', errorController);
             next(errorController);
         }
     };
 
-    return getUsersController;
+    return getUserController;
 
 };
