@@ -1,8 +1,8 @@
 //* Importaciones
 const { Router } = require('express');
 
-const { createUserController, getUserController, getUsersController } = require('./controllers');
-const { createUserRule, getUserRule } = require('./rules');
+const { createUserController, getUserController, getUsersController, updateUserController } = require('./controllers');
+const { createUserRule, getUserRule, updateUserRule } = require('./rules');
 
 /**
  * Funcion de inyeccion de dependencias para controlador.
@@ -31,15 +31,21 @@ module.exports = ( dependencies ) => {
         getUsersController(dependencies) );    //* --> Controlador
 
     //? Servicio para consultar un usuario
-    // userRouter.post( 
-    //     '/get_user',                          //* --> Ruta de servicio
-    //     getUserController(dependencies) );    //* --> Controlador
     userRouter.get(
         '/user/:users_uuid',                    //* --> Ruta de servicio
         getUserRule(dependencies),              //* --> Reglas
         getUserController(dependencies)         //* --> Controlador
     );
 
+    //? Servicio para modificar un usuario
+    userRouter.put(
+        '/user/:users_uuid',                    //* --> Ruta de servicio
+        [
+            getUserRule(dependencies),
+            updateUserRule(dependencies)        //* --> Reglas
+        ],                                          
+        updateUserController(dependencies)      //* --> Controlador
+    );
 
     return userRouter;
 };
