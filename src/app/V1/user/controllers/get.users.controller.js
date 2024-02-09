@@ -49,7 +49,7 @@ module.exports = ( dependencies ) => {
             });
             res.end();
         } catch (errorController) {
-            console.log('❌ GET_USERS_CONTROLLER_ERROR: ', errorController);
+            // console.log('❌ GET_USERS_CONTROLLER_ERROR: ', errorController);
             next(errorController);
         }
     };

@@ -1,5 +1,5 @@
 //* Importaciones
-const { updateUserService } = require('../services');
+const { deleteUserService } = require('../services');
 
 /**
  * Funcion de inyeccion de dependencias para controlador.
@@ -17,7 +17,7 @@ const { updateUserService } = require('../services');
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {HttpStatusCode} dependencies.statusCode - Lista de códigos de respuesta HTTP.
  * @param {Models} dependencies.models - Modelos
- * @returns {Funtion} updateUserController
+ * @returns {Funtion} deleteUserController
  */
 module.exports = ( dependencies ) => {
 
@@ -26,11 +26,11 @@ module.exports = ( dependencies ) => {
     
     //? Centralización de servicios
     const services = {
-        updateUser: updateUserService({ httpErrorHandler, models }),
+        deleteUser: deleteUserService({ httpErrorHandler, models }),
     };
 
     /**
-     * Controlador que coordiba el proceso para editar un usuario.
+     * Controlador que coordiba el proceso para eliminar un usuario.
      * 
      * Un controlador se encarga de realizar 4 ***responsabilidades***:
      * 1. Recibe la peticion entrante del cliente.
@@ -43,10 +43,10 @@ module.exports = ( dependencies ) => {
      * @param {*} res - Referencia para retornar una respuesta.
      * @param {*} next - Funcion que continua el flujo de la aplicacion.
      */
-    const updateUserController = async ( req, res, next ) => {
+    const deleteUserController = async ( req, res, next ) => {
         try {
-            //? Servicio de creación de usuario
-            const response = await services.updateUser(req.params.users_uuid, req.body);
+            //? Servicio de eliminación de usuario
+            const response = await services.deleteUser( req.params.users_uuid );
 
             if ( response ){
                 res.status(statusCode.OK);
@@ -54,9 +54,7 @@ module.exports = ( dependencies ) => {
                     success: true,
                     status_code: statusCode.OK,
                     response: {
-                        message: "Usuario ha sido actualizado éxitosamente",
-                        params: req.params,
-                        body: req.body
+                        message: "Usuario ha sido eliminado éxitosamente",
                     }
                 });
                 res.end();
@@ -68,6 +66,6 @@ module.exports = ( dependencies ) => {
         }
     };
 
-    return updateUserController;
+    return deleteUserController;
 
 }

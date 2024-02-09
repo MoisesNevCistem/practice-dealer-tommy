@@ -83,7 +83,7 @@ module.exports = ( dependencies ) => {
             }
             
         } catch (errorController) {
-            console.log('❌ CREATE_USER_CONTROLLER_ERROR: ', errorController);
+            // console.log('❌ CREATE_USER_CONTROLLER_ERROR: ', errorController);
             next(errorController);
         }
     };

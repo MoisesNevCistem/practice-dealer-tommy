@@ -1,7 +1,7 @@
 //* Importaciones
 const { Router } = require('express');
 
-const { createUserController, getUserController, getUsersController, updateUserController } = require('./controllers');
+const { createUserController, deleteUserController, getUserController, getUsersController, updateUserController } = require('./controllers');
 const { createUserRule, getUserRule, updateUserRule } = require('./rules');
 
 /**
@@ -23,12 +23,14 @@ module.exports = ( dependencies ) => {
     userRouter.post( 
         '/create_user',                        //* --> Ruta de servicio
         createUserRule(dependencies),          //* --> Reglas
-        createUserController(dependencies) );  //* --> Controlador
+        createUserController(dependencies) 
+    );  //* --> Controlador
     
     //? Servicio para consultar todos los usuarios
     userRouter.get( 
-        '/users',                          //* --> Ruta de servicio
-        getUsersController(dependencies) );    //* --> Controlador
+        '/users',                              //* --> Ruta de servicio
+        getUsersController(dependencies) 
+    );    //* --> Controlador
 
     //? Servicio para consultar un usuario
     userRouter.get(
@@ -45,6 +47,13 @@ module.exports = ( dependencies ) => {
             updateUserRule(dependencies)        //* --> Reglas
         ],                                          
         updateUserController(dependencies)      //* --> Controlador
+    );
+
+    //? Servicio para elimninar un usuario
+    userRouter.delete(
+        '/user/:users_uuid',                    //* --> Ruta de servicio
+        getUserRule(dependencies),              //* --> Reglas
+        deleteUserController(dependencies)      //* --> Controlador
     );
 
     return userRouter;
