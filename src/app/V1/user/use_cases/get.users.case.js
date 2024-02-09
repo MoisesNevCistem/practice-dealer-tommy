@@ -3,6 +3,7 @@
  * 
  * @typedef {object} Models
  * @property {string} User - Modelo de la entidad Usuario.
+ * @property {string} StatusUsers - Modelo de la entidad Estatus Usuario.
  * 
  * @param {Models} models - Modelos
  * @returns {Funtion} getUsersCase
@@ -10,16 +11,33 @@
 module.exports = ( models ) => {
 
     //? Desestructuración de dependencias
-    const { User } = models;
-
+    const { User, StatusUsers } = models;
+    console.log("StatusUsers: ", StatusUsers);
     /**
      * Caso de uso que obtiene todos los usuarios.
      * 
      * @name getAllUsersCase
-     * @returns {object|null} Retorna todos los usuarios o null.
+     * @returns {Array<object>|null} Retorna una lista de los usuarios o null.
      */
     const getUsersCase = async () => {
-        return await User.findAll();
+
+        /**
+         * @type {object} Configuración de campos a excluir.
+         */
+        const excludeFields = { exclude:['user_password', 'created_at', 'updated_at', 'id_status_user'] };
+
+        /**
+         * @type {object} Configuración de campos de estado de usuario.
+         */
+        const statusUserFields = { 
+            model: StatusUsers,
+            attributes: ['id_status_user', 'status_name'],
+        };
+
+        return await User.findAll({
+            attributes: excludeFields,
+            include: statusUserFields
+        });
     };
     
     return getUsersCase;

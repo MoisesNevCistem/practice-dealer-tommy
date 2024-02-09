@@ -1,11 +1,11 @@
 //* Importaciones
 const { sequelize } = require('../db.connect');
 const { DataTypes } = require('sequelize');
-const { statusUser } = require('../status_user');
+const { StatusUsers } = require('../status_user');
 
 //? Espeficaciones de la tabla
 const modelConfig = { 
-    table: 'users',
+    tableName: 'users',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
@@ -63,6 +63,6 @@ const User = sequelize.define('user', {
 
 }, modelConfig);
 
-User.belongsTo(statusUser, { foreignKey: 'id_status_user' }); //? 👈 Relación de Uno a Uno
+User.belongsTo(StatusUsers, { foreignKey: 'id_status_user' }); //? 👈 Relación de Uno a Uno
 
 module.exports = { User };

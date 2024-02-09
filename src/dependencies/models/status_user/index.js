@@ -4,14 +4,14 @@ const { DataTypes } = require('sequelize');
 
 //? Espeficaciones de la tabla
 const modelConfig = { 
-    table: 'status_users',
+    tableName: 'status_users',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
 };
 
 //? Definición de modelo
-const statusUser = sequelize.define('statusUser', {
+const StatusUsers = sequelize.define('status_users', {
     id_status_user:{
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -28,4 +28,4 @@ const statusUser = sequelize.define('statusUser', {
     }
 }, modelConfig);
 
-module.exports = { statusUser };
+module.exports = { StatusUsers };

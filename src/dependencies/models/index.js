@@ -1,7 +1,7 @@
 //* Importaciones
 const { checkConectionDB, sequelize } = require('./db.connect');
 
-const { statusUser } = require('./status_user');
+const { StatusUsers } = require('./status_user');
 const { User } = require('./user');
 
 module.exports = {
@@ -9,6 +9,6 @@ module.exports = {
     sequelize,
 
     //* Modelos
-    statusUser,
+    StatusUsers,
     User,
 }

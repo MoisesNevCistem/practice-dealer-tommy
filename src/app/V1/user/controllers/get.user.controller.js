@@ -29,8 +29,6 @@ module.exports = ( dependencies ) => {
     const services = {
         getUser: getUserService({ models }),
     };
-    
-    console.log("services: ", services.getUser );
 
     /**
      * Controlador que coordina la busqueda de un usuario.

@@ -4,16 +4,12 @@ const { getUsersCase } = require('../use_cases');
 /**
  * Funcion de inyeccion de dependencias para servicio.
  * 
- * @typedef {object} HttpErrorHandler
- * @property {object} ExceptionError - Clase que estándariza los errores de la apolicación.
- * 
  * @typedef {object} Models
  * @property {string} User - Modelo de la entidad Usuario.
  * 
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
- * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {Models} dependencies.models - Modelos
- * @returns {Funtion} getAllUserService
+ * @returns {Funtion} getUsersService
  */
 module.exports = ( dependencies ) => {
 
@@ -26,7 +22,7 @@ module.exports = ( dependencies ) => {
     };
 
     /**
-     * Servicio qie coordina el proceso de crear un usuario.
+     * Servicio que coordina el proceso de Obtener todos los usuarios..
      * 
      * Un servicio se encarga de ejecutar los casos de uso. Un caso de uso,
      * es una pequeña caracteristica que interviene en medio del flujo
@@ -34,13 +30,10 @@ module.exports = ( dependencies ) => {
      * 
      * El servicio, retorna un resultado al controlador.
      * 
-     * @name getAllUserService
+     * @name getUsersService
+     * @return {Array<object>}
      */
-    const getUsersService = async ( body ) => {
-
-        //* Obtener todos los usuarios
-        return await useCases.getAllUsers();
-    };
+    const getUsersService = async ( body ) => await useCases.getAllUsers();
 
     return getUsersService;
 
