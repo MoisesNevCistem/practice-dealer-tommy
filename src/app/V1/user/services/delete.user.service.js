@@ -67,7 +67,7 @@ module.exports = ( dependencies ) => {
 
         //* Validar que el usuario exista
         const user = await cases.getUser( {
-            excludeField,
+            excludeFields,
             userCondition: userByUUID
         } );
 

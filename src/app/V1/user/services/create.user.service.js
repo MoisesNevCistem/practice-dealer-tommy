@@ -81,11 +81,11 @@ module.exports = ( dependencies ) => {
 
         //? Obtener usuario por correo
         const userEmail = await cases.getUser( {
-            excludeField,
+            excludeFields,
             userCondition: userByEmail
         } );
         const userPhoneNumber = await cases.getUser( {
-            excludeField,
+            excludeFields,
             userCondition: userByPhoneNumber
         } );
 
