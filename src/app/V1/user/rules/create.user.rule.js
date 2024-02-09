@@ -2,7 +2,7 @@
 const { check } = require('express-validator');
 
 /**
- * Funcion de inyeccion de dependencias para controlador.
+ * Funcion de inyeccion de dependencias para reglas.
  * 
  * @typedef {object} SchemeCustomRules - Esquema de reglas personalizadas
  * @property {Function} checkEmail - Regla personalizada para evalúar correo electrónico.

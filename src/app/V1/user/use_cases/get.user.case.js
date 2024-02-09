@@ -10,7 +10,7 @@
 module.exports = ( models ) => {
 
     //? Desestructuración de dependencias
-    const { User } = models;
+    const { StatusUsers, User } = models;
 
     /**
      * Caso de uso que obtiene un solo usuaurio.
@@ -20,7 +20,25 @@ module.exports = ( models ) => {
      * @returns {object|null} Retorna una referencia del usuario o un valor nulo.
      */
     const getUserCase = async ( userCondition ) => {
-        return await User.findOne({ where: userCondition });
+
+        /**
+         * @type {object} Configuración de campos a excluir.
+         */
+        const excludeFields = { exclude:['user_password', 'created_at', 'updated_at', 'id_status_user'] };
+
+        /**
+         * @type {object} Configuración de campos de estado de usuario.
+         */
+        const statusUserFields = { 
+            model: StatusUsers,
+            attributes: ['id_status_user', 'status_name'],
+        };
+
+        return await User.findOne({ 
+            where: userCondition,
+            attributes: excludeFields,
+            include: statusUserFields
+        });
     };
     
     return getUserCase;

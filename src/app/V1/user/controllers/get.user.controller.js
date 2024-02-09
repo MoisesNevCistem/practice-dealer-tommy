@@ -4,34 +4,34 @@ const { getUserService } = require('../services');
 /**
  * Funcion de inyeccion de dependencias para controlador.
  * 
- * @typedef {object} Helpers
- * @property {Function} generateUUID - Función que genera un código UUID.
+ * @typedef {object} HttpErrorHandler
+ * @property {object} ExeptionError - Clase que estándariza los errores de la apolicación.
  * 
  * @typedef {object} HttpStatusCode
  * @property {string} OK - Codigo de respuesta HTTP.
  * 
  * @typedef {object} Models
  * @property {string} User - Modelo de la entidad Usuario.
+ * @property {string} StatusUser - Modelo de la entidad estatus Usuario.
  * 
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
- * @param {Helpers} dependencies.helpers - Código de apoyo.
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {HttpStatusCode} dependencies.statusCode - Lista de códigos de respuesta HTTP.
  * @param {Models} dependencies.models - Modelos
- * @returns {Funtion} getAllUsersController
+ * @returns {Funtion} getUserController
  */
 module.exports = ( dependencies ) => {
 
     //? Desestructuracion de dependencias
-    const { statusCode, models } = dependencies;
+    const { httpErrorHandler, statusCode, models } = dependencies;
     
     //? Centralización de servicios
     const services = {
-        getUser: getUserService({ models }),
+        getUser: getUserService({ httpErrorHandler, models }),
     };
 
     /**
-     * Controlador que coordina la busqueda de un usuario.
+     * Controlador que coordina el obtener todos los usuarios.
      * 
      * Un controlador se encarga de realizar 4 ***responsabilidades***:
      * 1. Recibe la peticion entrante del cliente.
@@ -46,24 +46,15 @@ module.exports = ( dependencies ) => {
      */
     const getUserController = async ( req, res, next ) => {
         try {
-            
-            //? Servicio de obtener todos de usuarios
-            const response = await services.getUser(req.body);
-
-            if ( response ){
-                res.status(statusCode.OK);
-                res.json({
-                    success: true,
-                    status_code: statusCode.OK,
-                    response: {
-                        data: response,
-                    }
-                });
-                res.end();
-            }
-            
+            res.status(statusCode.OK);
+            res.json({
+                success: true,
+                status_code: statusCode.OK,
+                response:  await services.getUser( req.params.users_uuid )
+            });
+            res.end();
         } catch (errorController) {
-            console.log('❌ CREATE_USER_CONTROLLER_ERROR: ', errorController);
+            console.log('❌ GET_USER_CONTROLLER_ERROR: ', errorController);
             next(errorController);
         }
     };

@@ -13,11 +13,12 @@ const { getUserCase } = require('../use_cases');
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {Models} dependencies.models - Modelos
- * @returns {Funtion} createUserService
+ * @returns {Funtion} getUsersService
  */
 module.exports = ( dependencies ) => {
+
     //? Desestructuración de dependencias
-    const { models } = dependencies;
+    const { httpErrorHandler, models } = dependencies;
 
     //? Centralización de casos de uso
     const useCases = {
@@ -25,7 +26,7 @@ module.exports = ( dependencies ) => {
     };
 
     /**
-     * Servicio que coordina la busqueda de un usuario por medio de correo electrónico.
+     * Servicio que coordina el proceso de obtener un usuario.
      * 
      * Un servicio se encarga de ejecutar los casos de uso. Un caso de uso,
      * es una pequeña caracteristica que interviene en medio del flujo
@@ -33,46 +34,25 @@ module.exports = ( dependencies ) => {
      * 
      * El servicio, retorna un resultado al controlador.
      * 
-     * @name createUserService
-     * @param {object} body - cuerpo de busqueda.
-     * @param {string} body.search - Busqueda.
+     * @name getUsersService
+     * @return {object}
      */
-    const createUserService = async ( body ) => {
+    const getUsersService = async ( userUUID ) => {
         
-        //? Condición de búsqueda de usuario
-        // const userSearch = {
-        //     email: body.search,
-        // };
+        //? Condición para obtener usuario
+        const userByUUID = { users_uuid: userUUID };
 
-        // const dbToSearch = await useCases.getUser( userSearch );
+        //* Obtener usuario
+        const user = await useCases.getUser( userByUUID );
 
-        // if( dbToSearch.email === body.search || dbToSearch.phone_number === body.search) return dbToSearch;
-
-        const userByEmail = {
-            email: body.search,
-        };
-
-        const userByPhoneNumber = {
-            phone_number: body.search,
-        };
-
-        //? Obtener usuario por correo
-        const userEmail = await useCases.getUser( userByEmail );
-        const userPhoneNumber = await useCases.getUser( userByPhoneNumber );
-
-        //* Verificar que el correo no este registrado
-        if (userEmail !== null && userEmail.email === body.search) {
-            return userEmail;
+        //* Verificar si el usuario existe
+        if ( user === null || user.users_uuid !== userUUID ) {
+            throw new httpErrorHandler.ExceptionError('NOT_USER_EXIST');
         }
 
-        //* Verificar que el número telefonico no este registrado
-        if (userPhoneNumber !== null && userPhoneNumber.phone_number === body.search) {
-            return userPhoneNumber;
-        }
+        return user;
+    }
 
-        return null;
-    };
-
-    return createUserService;
+    return getUsersService;
 
 };

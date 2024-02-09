@@ -55,6 +55,16 @@ const repositoryErrors = {
                 message: `El número '${ phoneNumber }' ya ha sido registrado`,
             }
         }
+    },
+    NOT_USER_EXIST: ( ) => {
+        return{ 
+            succes: false,
+            status_code: statusCode.CONFLICT,
+            error:{
+                code: 'B06',
+                message: `El usuario que intenta consultar no existe`,
+            }
+        }
     }
 }
 
