@@ -1,5 +1,6 @@
 //* Importaciones
 const { ExceptionError } = require('../helpers/exception.error');
+const { generateLogs } = require('../../helpers');
 
 /**
  * Centraliza los errores que se generán en la aplicación.
@@ -37,6 +38,9 @@ const errorCaught = ( error, req, res, next ) => {
     } else {
         //? Si es un error desconocido, se obtiene y se retorna como un error 500.
         errorCaught = new ExceptionError('INTERNAL_SERVER_ERROR', error.stack).setError();
+
+        //? Registro del error desconocido
+        generateLogs( error.stack );
     }
 
     //? Retorno de respuesta del error en JSON.

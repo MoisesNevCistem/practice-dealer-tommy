@@ -8,3 +8,5 @@ shared/ssl/*.pem
 shared/ssl/*.key
 shared/ssl/*.cert
 shared/ssl/*.crt
+
+shared/logs/*.json

@@ -29,6 +29,7 @@ const runApp = ( router ) => {
 
     app.use( allowedOriginsCors() );
     app.use( helmet() );
+    app.use( express.json() );
     app.use( router );
 
     return app;

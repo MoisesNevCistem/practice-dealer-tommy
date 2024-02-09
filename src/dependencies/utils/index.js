@@ -1,5 +1,11 @@
+//* Importaciones
 const deploys = require('./deploys');
+const formatters = require('./formatters');
+const {repositoryRegex} = require('./repository_regex');
+
 
 module.exports = {
-    deploys
+    deploys,
+    formatters,
+    repositoryRegex,
 }
