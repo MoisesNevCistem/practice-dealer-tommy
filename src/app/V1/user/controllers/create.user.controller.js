@@ -25,16 +25,17 @@ const { createUserService } = require('../services');
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {HttpStatusCode} dependencies.statusCode - Lista de códigos de respuesta HTTP.
  * @param {Models} dependencies.models - Modelos
+ * @param {object} dependencies.useCases - Casos de Uso.
  * @returns {Funtion} createUserController
  */
 module.exports = ( dependencies ) => {
 
     //? Desestructuracion de dependencias
-    const { helpers, httpErrorHandler, statusCode, models } = dependencies;
+    const { helpers, httpErrorHandler, statusCode, models, useCases } = dependencies;
     
     //? Centralización de servicios
     const services = {
-        createUser: createUserService({ httpErrorHandler, models }),
+        createUser: createUserService({ httpErrorHandler, models, useCases }),
     };
 
     /**

@@ -13,16 +13,17 @@ const { getUsersService } = require('../services');
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
  * @param {HttpStatusCode} dependencies.statusCode - Lista de códigos de respuesta HTTP.
  * @param {Models} dependencies.models - Modelos
+ * @param {object} dependencies.useCases - Casos de Uso.
  * @returns {Funtion} getAllUsersController
  */
 module.exports = ( dependencies ) => {
 
     //? Desestructuracion de dependencias
-    const { statusCode, models } = dependencies;
+    const { statusCode, models, useCases } = dependencies;
     
     //? Centralización de servicios
     const services = {
-        getUsers: getUsersService({ models }),
+        getUsers: getUsersService({ models, useCases }),
     };
 
     /**

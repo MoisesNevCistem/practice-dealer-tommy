@@ -1,6 +1,3 @@
-//* Importaciones
-const { getUserCase, deleteUserCase } = require('../use_cases');
-
 /**
  * Funcion de inyeccion de dependencias para servicio.
  * 
@@ -8,22 +5,28 @@ const { getUserCase, deleteUserCase } = require('../use_cases');
  * @property {object} ExceptionError - Clase que estándariza los errores de la apolicación.
  * 
  * @typedef {object} Models
- * @property {string} User - Modelo de la entidad Usuario.
+ * @property {string} User - Modelo de la entidad Usuario.\
+ * @property {string} StatusUser - Modelo de la entidad Estatus Usuario.
+ * 
+ * @typedef {object} UseCases
+ * @property {Function} deleteUserCase - Caso de uso para Eliminar un usuario.
+ * @property {Function} getUserCase - Caso de uso para  Obtenener un usuario.
  * 
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {Models} dependencies.models - Modelos
+ * @param {UseCases} dependencies.useCases - Casos de Uso.
  * @returns {Funtion} deleteUserService
  */
 module.exports = ( dependencies ) => {
 
     //? Desestructuración de dependencias
-    const { models, httpErrorHandler } = dependencies;
+    const { models, httpErrorHandler, useCases } = dependencies;
 
     //? Centralización de casos de uso
-    const useCases = {
-        deleteUser: deleteUserCase( models ),
-        getUser: getUserCase( models ),
+    const cases = {
+        deleteUser: useCases.deleteUserCase( models ),
+        getUser: useCases.getUserCase( models ),
     };
 
     /**
@@ -43,15 +46,37 @@ module.exports = ( dependencies ) => {
         //? Condición para obtener usuario
         const userByUUID = { users_uuid: userUUID };
 
+        /**
+         * @type {object} Configuración de campos a excluir.
+         */
+        const excludeFields = { 
+            exclude:[
+                'first_name',
+                'middle_name',
+                'last_name',
+                'surename',
+                'email',
+                'user_password',
+                'phone_number',
+                'user_address',
+                'created_at', 
+                'updated_at',
+                'id_status_user'
+            ] 
+        };
+
         //* Validar que el usuario exista
-        const user = await useCases.getUser( userByUUID );
+        const user = await cases.getUser( {
+            excludeField,
+            userCondition: userByUUID
+        } );
 
         if ( user === null || user.users_uuid !== userUUID ) {
             throw new httpErrorHandler.ExceptionError('NOT_USER_EXIST');
         }
 
         //* Eliminar usuario
-        return await useCases.deleteUser( userUUID );
+        return await cases.deleteUser( userUUID );
 
         return true
 

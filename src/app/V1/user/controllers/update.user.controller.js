@@ -17,16 +17,17 @@ const { updateUserService } = require('../services');
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {HttpStatusCode} dependencies.statusCode - Lista de códigos de respuesta HTTP.
  * @param {Models} dependencies.models - Modelos
+ * @param {object} dependencies.useCases - Casos de Uso.
  * @returns {Funtion} updateUserController
  */
 module.exports = ( dependencies ) => {
 
     //? Desestructuracion de dependencias
-    const { httpErrorHandler, statusCode, models } = dependencies;
+    const { httpErrorHandler, statusCode, models, useCases } = dependencies;
     
     //? Centralización de servicios
     const services = {
-        updateUser: updateUserService({ httpErrorHandler, models }),
+        updateUser: updateUserService({ httpErrorHandler, models, useCases }),
     };
 
     /**

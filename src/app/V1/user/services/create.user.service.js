@@ -1,6 +1,3 @@
-//* Importaciones
-const { createUserCase, getUserCase } = require('../use_cases');
-
 /**
  * Funcion de inyeccion de dependencias para servicio.
  * 
@@ -9,21 +6,27 @@ const { createUserCase, getUserCase } = require('../use_cases');
  * 
  * @typedef {object} Models
  * @property {string} User - Modelo de la entidad Usuario.
+ * @property {string} StatusUser - Modelo de la entidad Estatus Usuario.
+ * 
+ * @typedef {object} UseCases
+ * @property {Function} createUserCase - Caso de uso para Crear un usuario.
+ * @property {Function} getUserCase - Caso de uso para  Obtenener un usuario.
  * 
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {Models} dependencies.models - Modelos
+ * @param {UseCases} dependencies.useCases - Casos de Uso.
  * @returns {Funtion} createUserService
  */
 module.exports = ( dependencies ) => {
 
     //? Desestructuración de dependencias
-    const { models, httpErrorHandler } = dependencies;
+    const { models, httpErrorHandler, useCases } = dependencies;
 
     //? Centralización de casos de uso
-    const useCases = {
-        createUser: createUserCase( models ),
-        getUser: getUserCase( models ),
+    const cases = {
+        createUser: useCases.createUserCase( models ),
+        getUser: useCases.getUserCase( models ),
     };
 
     /**
@@ -58,9 +61,33 @@ module.exports = ( dependencies ) => {
             phone_number: body.phone_number,
         };
 
+        /**
+         * @type {object} Configuración de campos a excluir.
+         */
+        const excludeFields = { 
+            exclude:[
+                'users_uuid',
+                'first_name',
+                'middle_name',
+                'last_name',
+                'surename',
+                'user_password',
+                'user_address',
+                'created_at', 
+                'updated_at',
+                'id_status_user'
+            ] 
+        };
+
         //? Obtener usuario por correo
-        const userEmail = await useCases.getUser( userByEmail );
-        const userPhoneNumber = await useCases.getUser( userByPhoneNumber );
+        const userEmail = await cases.getUser( {
+            excludeField,
+            userCondition: userByEmail
+        } );
+        const userPhoneNumber = await cases.getUser( {
+            excludeField,
+            userCondition: userByPhoneNumber
+        } );
 
         //* Verificar que el correo no este registrado
         if ( userEmail !== null && userEmail.email === body.email ){
@@ -73,7 +100,7 @@ module.exports = ( dependencies ) => {
         }
 
         //* Crear usuario
-        return await useCases.createUser( body );
+        return await cases.createUser( body );
 
     };
 
