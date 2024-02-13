@@ -17,15 +17,11 @@ module.exports = ( dependencies ) => {
      */
     const userRouter = Router();
 
+    //? Desestructuración de dependencias
+    const { authorizationUser } = dependencies.middlewares;
+
     //* ----> Definicion de Rutas
 
-    //? Servicio para creación de usuarios
-    userRouter.post( 
-        '/create_user',                        //* --> Ruta de servicio
-        createUserRule(dependencies),          //* --> Reglas
-        createUserController(dependencies) 
-    );  //* --> Controlador
-    
     //? Servicio para consultar todos los usuarios
     userRouter.get( 
         '/users',                              //* --> Ruta de servicio
@@ -38,6 +34,16 @@ module.exports = ( dependencies ) => {
         getUserRule(dependencies),              //* --> Reglas
         getUserController(dependencies)         //* --> Controlador
     );
+    
+    //* Autorización
+    userRouter.use( authorizationUser );
+
+    //? Servicio para creación de usuarios
+    userRouter.post( 
+        '/create_user',                        //* --> Ruta de servicio
+        createUserRule(dependencies),          //* --> Reglas
+        createUserController(dependencies) 
+    );  //* --> Controlador
 
     //? Servicio para modificar un usuario
     userRouter.put(

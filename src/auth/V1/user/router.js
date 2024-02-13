@@ -1,8 +1,8 @@
 //* Importaciones
 const { Router } = require('express');
 
-const { loginController } = require('./controllers');
-const { loginRule } = require('./rules');
+const { loginController, loginSecureController } = require('./controllers');
+const { loginRule, loginSecureRule } = require('./rules');
 
 /**
  * Funcion de inyeccion de dependencias para controlador.
@@ -24,6 +24,13 @@ module.exports = ( dependencies ) => {
         '/login',                                //* --> Ruta de servicio
         loginRule(dependencies),                 //* --> Reglas
         loginController(dependencies),           //* --> Controlador
+    );
+
+    //? Servicio para creación de usuarios
+    userRouter.post(
+        '/login-secure',                         //* --> Ruta de servicio
+        loginSecureRule(dependencies),           //* --> Reglas
+        loginSecureController(dependencies),     //* --> Controlador
     );
 
     return userRouter;

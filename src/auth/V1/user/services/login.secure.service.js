@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 /**
  * Funcion de inyeccion de dependencias para servicio.
  * 
@@ -20,7 +22,7 @@
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {Models} dependencies.models - Modelos
  * @param {UseCases} dependencies.useCases - Casos de Uso.
- * @returns {Funtion} loginService
+ * @returns {Funtion} loginSecureService
  */
 module.exports = ( dependencies ) => {
 
@@ -29,7 +31,7 @@ module.exports = ( dependencies ) => {
 
     //? Centralización de casos de uso
     const cases = {
-        getUser: useCases.getUserCase( models ),
+        getUserSecure: useCases.getUserCase( models ),
     };
 
     /**
@@ -41,19 +43,21 @@ module.exports = ( dependencies ) => {
      * 
      * El servicio, retorna un resultado al controlador.
      * 
-     * @name loginService
+     * @name loginSecureService
      * @param {object} body - Credenciales de usuario.
-     * @param {string} body.email - Correo electrónico.
+     * @param {string} body.username - Correo electrónico.
      * @param {string} body.user_password - Contraseña.
      */
-    const loginService = async ( body ) => {
-
-        //?
+    const loginSecureService = async ( body ) => {
+        //? Contraseña secreta
         const { PWD_SECRET } = process.env;
 
         //? Condición de búsqueda de usuario
-        const userByEmail = {
-            email: body.email,
+        const usernameCondition = {
+            [Op.or]: [
+                { email:  body.username },
+                { phone_number:  body.username }
+            ]
         };
 
         /**
@@ -70,21 +74,23 @@ module.exports = ( dependencies ) => {
                 'id_status_user'
             ] 
         };
-    
-        //? Obtener usuario por correo
-        const user = await cases.getUser( {
+
+        //? Obtener usuario por correo o número de teléfono
+        const user = await cases.getUserSecure( {
             excludeFields,
-            userCondition: userByEmail
+            userCondition: usernameCondition
         } );
-        
+
+        if( user === null ) throw new httpErrorHandler.ExceptionError('LOGIN_FAILED');
+
         //? Concentración de contraseña
         const setPassword = body.password + PWD_SECRET;
 
-        //? evaluación de contraseña
-        const isPassword = await helpers.encryptHandler.verifiedEncrypted( setPassword, user.user_password);
+        //? Evaluación de contraseña
+        const isPassword = await helpers.encryptHandler.verifiedEncrypted( setPassword, user.user_password );
 
         //* Verificar que el usuario exista y credenciales de usuario
-        if( user === null || !isPassword || user.email !== body.email ) throw new httpErrorHandler.ExceptionError('LOGIN_FAILED');
+        if( !isPassword && (user.email !== body.username || user.phone_number !== body.username) ) throw new httpErrorHandler.ExceptionError('LOGIN_FAILED');
 
         const { generateJWT } = helpers.jwt;
 
@@ -110,8 +116,6 @@ module.exports = ( dependencies ) => {
 
     };
 
-    return loginService;
+    return loginSecureService;
 
 };
-
-//TODO: Realizar inicio de sesión que evalue el correo y el número y poder realizar el ingreso  
