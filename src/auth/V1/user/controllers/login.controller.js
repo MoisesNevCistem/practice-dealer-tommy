@@ -53,7 +53,6 @@ module.exports = ( dependencies ) => {
      */
     const loginController = async ( req, res, next ) => {
         try {
-
             res.status(statusCode.OK);
                 res.json({
                     success: true,

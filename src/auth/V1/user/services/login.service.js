@@ -3,7 +3,7 @@
  * 
  * @typedef {object} Helpers
  * @property {object} encryptHandler - Clase que estándariza los errores de la apolicación.
- * @property {object} JWT - Clase que estándariza los errores de la apolicación.
+ * @property {object} jwt - Clase que estándariza los errores de la aplicación.
  * 
  * @typedef {object} HttpErrorHandler
  * @property {object} ExceptionError - Clase que estándariza los errores de la apolicación.
@@ -16,7 +16,7 @@
  * @property {string} User - Modelo de la entidad Usuario.
  * 
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
- * @param {HttpErrorHandler} dependencies.helpers - Funciones de apoyo.
+ * @param {Helpers} dependencies.helpers - Funciones de apoyo.
  * @param {HttpErrorHandler} dependencies.httpErrorHandler - Manejador de errores
  * @param {Models} dependencies.models - Modelos
  * @param {UseCases} dependencies.useCases - Casos de Uso.
@@ -48,6 +48,9 @@ module.exports = ( dependencies ) => {
      */
     const loginService = async ( body ) => {
 
+        //?
+        const { PWD_SECRET } = process.env;
+
         //? Condición de búsqueda de usuario
         const userByEmail = {
             email: body.email,
@@ -67,18 +70,43 @@ module.exports = ( dependencies ) => {
                 'id_status_user'
             ] 
         };
-
+    
         //? Obtener usuario por correo
-        const userEmail = await cases.getUser( {
+        const user = await cases.getUser( {
             excludeFields,
             userCondition: userByEmail
         } );
         
-        console.log('✨ Credential: ', body);
-        console.log('userEmail: ', userEmail);
+        //? Concentración de contraseña
+        const setPassword = body.password + PWD_SECRET;
+
+        //? evaluación de contraseña
+        const isPassword = await helpers.encryptHandler.verifiedEncrypted( setPassword, user.user_password);
+
+        //* Verificar que el usuario exista y credenciales de usuario
+        if( user === null || !isPassword || user.email !== body.email ) throw new httpErrorHandler.ExceptionError('LOGIN_FAILED');
+
+        const { generateJWT } = helpers.jwt;
 
         //* Iniciar sesión
-        return{};
+        return{
+            user: {
+                id_users: user.id_users,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                email: user.email,
+                phone_number: user.phone_number,
+                user_address: user.user_address,
+                status_user: {
+                    id_status_user: user.status_user.id_status_user,
+                    status_name: user.status_user.status_name
+                } 
+            },
+            token: generateJWT({
+                id_user: user.id_users,
+                email: user.email
+            })
+        };
 
     };
 

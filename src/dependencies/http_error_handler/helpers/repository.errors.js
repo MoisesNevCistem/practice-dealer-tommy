@@ -65,6 +65,36 @@ const repositoryErrors = {
                 message: `El usuario que intenta consultar no existe`,
             }
         }
+    },
+    EXPIRED_TOKEN: ( ) => {
+        return{ 
+            succes: false,
+            status_code: statusCode.UNAUTHORIZED,
+            error:{
+                code: 'B07',
+                message: `El token proporcionado ha expirado`,
+            }
+        }
+    },
+    INVALID_TOKEN: ( ) => {
+        return{ 
+            succes: false,
+            status_code: statusCode.UNAUTHORIZED,
+            error:{
+                code: 'B08',
+                message: `El token proporcionado no es válido`,
+            }
+        }
+    },
+    LOGIN_FAILED: ( ) => {
+        return{ 
+            succes: false,
+            status_code: statusCode.UNAUTHORIZED,
+            error:{
+                code: 'B09',
+                message: `Inicio de sesión no válido`,
+            }
+        }
     }
 }
 

@@ -12,7 +12,7 @@ module.exports = ( models ) => {
 
     //? Desestructuración de dependencias
     const { User, StatusUsers } = models;
-    console.log("StatusUsers: ", StatusUsers);
+
     /**
      * Caso de uso que obtiene todos los usuarios.
      * 
