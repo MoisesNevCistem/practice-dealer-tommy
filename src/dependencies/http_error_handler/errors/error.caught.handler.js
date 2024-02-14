@@ -1,6 +1,6 @@
 //* Importaciones
-const { ExceptionError } = require('../helpers/exception.error');
-const { generateLogs } = require('../../helpers');
+const { ExceptionError, generateLogs } = require('../helpers');
+
 
 /**
  * Centraliza los errores que se generán en la aplicación.

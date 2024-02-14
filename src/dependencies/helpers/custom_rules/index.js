@@ -34,8 +34,23 @@ const checkPassword = ( value ) => {
     return repositoryRegex.REGEX_PASSWORD.test( value );
 };
 
+/**
+ * Verifica la estructura necesaria para el nombre del usuario.
+ * 
+ * @name checkNumber
+ * @param {string|number} value - Define si el valor cumple con el formato correcto
+ * @returns boolean
+ */
+const checkUsername = ( value ) => {
+    if( repositoryRegex.REGEX_EMAIL.test( value ) ) return true;
+    if( repositoryRegex.REGEX_INT.test( value ) ) return true;
+    
+    return false;
+};
+
 module.exports = { 
     checkEmail,
     checkNumber,
+    checkUsername,
     checkPassword,
 };

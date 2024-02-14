@@ -1,24 +1,25 @@
-//* Importaciones
-const { getUsersCase } = require('../use_cases');
-
 /**
  * Funcion de inyeccion de dependencias para servicio.
  * 
  * @typedef {object} Models
  * @property {string} User - Modelo de la entidad Usuario.
  * 
+ * @typedef {object} UseCases
+ * @property {Function} getUsersCase - Caso de uso para  Obtenener todos usuario.
+ * 
  * @param {object} dependencies - Lista de dependencias de la aplicacion.
  * @param {Models} dependencies.models - Modelos
+ * @param {UseCases} dependencies.useCases - Casos de Uso.
  * @returns {Funtion} getUsersService
  */
 module.exports = ( dependencies ) => {
 
     //? Desestructuración de dependencias
-    const { models } = dependencies;
+    const { models, useCases } = dependencies;
 
     //? Centralización de casos de uso
-    const useCases = {
-        getAllUsers: getUsersCase( models )
+    const cases = {
+        getAllUsers: useCases.getUsersCase( models )
     };
 
     /**
@@ -33,7 +34,7 @@ module.exports = ( dependencies ) => {
      * @name getUsersService
      * @return {Array<object>}
      */
-    const getUsersService = async ( body ) => await useCases.getAllUsers();
+    const getUsersService = async ( body ) => await cases.getAllUsers();
 
     return getUsersService;
 
