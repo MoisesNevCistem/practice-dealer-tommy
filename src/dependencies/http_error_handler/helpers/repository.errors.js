@@ -95,7 +95,17 @@ const repositoryErrors = {
                 message: `Inicio de sesión no válido`,
             }
         }
-    }
+    },
+    MISSING_BEARAR_TOKEN: ( ) => {
+        return{ 
+            succes: false,
+            status_code: statusCode.UNAUTHORIZED,
+            error:{
+                code: 'B10',
+                message: `Ausencia de credenciales para procesar la petición`,
+            }
+        }
+    },
 }
 
 module.exports = { repositoryErrors }

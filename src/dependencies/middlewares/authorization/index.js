@@ -1,3 +1,6 @@
+//* Importaciones
+const { ExceptionError } = require('../../http_error_handler');
+const { jwt } = require('../../helpers');
 /**
      * Middleware que autoriza peticiones si hay un token de acceso.
      * 
@@ -10,13 +13,20 @@
 const authorizationUser = async ( req, res, next ) => {
 
     try {
-
         
-        const bearerToken = req.headers.authorization .split(" ")[1];
-        console.log('✨ setToken: ', bearerToken);
+        //? Evaluar si existe un token
+        if( req.headers.authorization === undefined ) throw new ExceptionError('MISSING_BEARAR_TOKEN')
 
-        //TODO: Evaluar si existe un token
-        //TODO: Verificar la integridad del token ( que sea valido y vigentes)
+        /**
+         * @type {string} Obtención de bearer token.
+         */
+        const bearerToken = req.headers.authorization.split(" ")[1];
+        
+        //? Verificar la integridad del token ( que sea válido y vigentes)
+        const payload = jwt.verifyJWT( bearerToken );
+
+        //? Inyectamos el ID Usuario en lampetición
+        req.id_user = payload.id_user;
 
         next();
     } catch ( AuthorizationError ) {

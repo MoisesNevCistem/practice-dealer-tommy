@@ -36,12 +36,18 @@ module.exports = ( dependencies ) => {
     );
     
     //* Autorización
-    userRouter.use( authorizationUser );
+    //? Opción 1
+    // userRouter.use( authorizationUser );
 
     //? Servicio para creación de usuarios
     userRouter.post( 
         '/create_user',                        //* --> Ruta de servicio
-        createUserRule(dependencies),          //* --> Reglas
+        [
+            //? Opción 2 ( mejor opción )
+            authorizationUser,
+            createUserRule(dependencies), 
+
+        ],         //* --> Reglas
         createUserController(dependencies) 
     );  //* --> Controlador
 
@@ -49,6 +55,8 @@ module.exports = ( dependencies ) => {
     userRouter.put(
         '/user/:users_uuid',                    //* --> Ruta de servicio
         [
+            //? Opción 2 ( mejor opción )
+            authorizationUser,
             getUserRule(dependencies),
             updateUserRule(dependencies)        //* --> Reglas
         ],                                          
@@ -57,9 +65,13 @@ module.exports = ( dependencies ) => {
 
     //? Servicio para elimninar un usuario
     userRouter.delete(
-        '/user/:users_uuid',                    //* --> Ruta de servicio
-        getUserRule(dependencies),              //* --> Reglas
-        deleteUserController(dependencies)      //* --> Controlador
+        '/user/:users_uuid', 
+        [
+            //? Opción 2 ( mejor opción )
+            authorizationUser,                   //* --> Ruta de servicio
+            getUserRule(dependencies), 
+        ],                                        //* --> Reglas
+        deleteUserController(dependencies)        //* --> Controlador
     );
 
     return userRouter;
